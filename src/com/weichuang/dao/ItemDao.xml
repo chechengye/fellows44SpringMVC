@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weichuang.dao.ItemDao">
+
+    <sql id="Base_Item_Column">i.id , i.name ,i.price, i.detail,i.pic,i.createtime</sql>
+    <select id="getItemList" resultType="Item">
+        SELECT
+         <include refid="Base_Item_Column"/>
+         from items i
+    </select>
+
+    <select id="getItemById" resultType="Item">
+        SELECT
+        <include refid="Base_Item_Column"/>
+        from items i where id = #{id}
+    </select>
+</mapper>
+
+
