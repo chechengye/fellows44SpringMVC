@@ -7,5 +7,5 @@ import java.util.List;
 public interface ItemDao {
     List<Item> getItemList();
 
-    Item getItemById(String id);
+    Item getItemById(int id);
 }

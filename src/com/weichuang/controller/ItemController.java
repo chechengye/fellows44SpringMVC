@@ -49,8 +49,8 @@ public class ItemController {
     }
 
     @RequestMapping("/itemEdit.do")
-    public ModelAndView getItemEditById(HttpServletRequest req){
-        String id = req.getParameter("id");
+    public ModelAndView getItemEditById(int id){
+        //String id = req.getParameter("id");
         Item item = itemService.getItemById(id);
         ModelAndView mav = new ModelAndView();
         mav.addObject("item",item);
