@@ -47,5 +47,7 @@
     <bean id="configurer"  class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.weichuang.dao"></property>
     </bean>
+    <!--配置自定义的全局异常处理器-->
+    <bean class="com.weichuang.exception.MyHandlerExceptionResolver"></bean>
     <mvc:annotation-driven/>
 </beans>

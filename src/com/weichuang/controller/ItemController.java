@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,7 +25,7 @@ public class ItemController {
     @Autowired
     ItemService itemService;
     //@RequestMapping : 配置前端映射的/路由
-    @RequestMapping("/itemList.do")
+    @RequestMapping(value = {"/itemList.do" , "/listItem.do"} , method = {RequestMethod.POST , RequestMethod.GET})
     public ModelAndView getItemList(HttpServletRequest req , HttpSession session){
         //1、获取数据库内容
         /*List<Item> itemList = jt.query("select * from items", new RowMapper<Item>() {
@@ -39,6 +40,7 @@ public class ItemController {
                 return item;
             }
         });*/
+        int i = 1/0;
         List<Item> itemList = itemService.getItemList();
         //ModelAndView : Model 底层实现 LinkedHashMap 结构key，value
         //前端控制器会将model中配置的所有键值对通过req.setAttribute(key,val)存于域中
