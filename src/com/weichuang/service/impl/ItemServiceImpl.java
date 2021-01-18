@@ -24,7 +24,27 @@ public class ItemServiceImpl implements ItemService {
      * @return
      */
     @Override
-    public Item getItemById(int id) {
+    public Item getItemById(Integer id) {
         return itemDao.getItemById(id);
+    }
+
+    /**
+     * 更新商品
+     * @param item
+     * @return
+     */
+    @Override
+    public int updateItemById(Item item) {
+        return itemDao.updateItemById(item);
+    }
+
+    /**
+     * 根据传递的id进行删除操作
+     * @param ids
+     * @return
+     */
+    @Override
+    public int deleteItemByIds(String[] ids) {
+        return itemDao.deleteItemByIds(ids);
     }
 }

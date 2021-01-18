@@ -16,6 +16,38 @@
         <include refid="Base_Item_Column"/>
         from items i where id = #{id}
     </select>
+
+    <update id="updateItemById" parameterType="Item">
+        update items
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="price != null and price != ''">
+                price = #{price},
+            </if>
+            <if test="detail != null and detail != ''">
+                detail = #{detail},
+            </if>
+            <if test="pic != null and pic != ''">
+                pic = #{pic},
+            </if>
+            <if test="createtime != null and createtime != ''">
+                createtime = #{createtime},
+            </if>
+            id = #{id}
+        </set>
+        where id = #{id}
+    </update>
+    <!-- where id in (1,2,3)-->
+    <delete id="deleteItemByIds">
+        delete from items
+        <where>
+            <foreach collection="array" open="id in (" separator="," close=")" item="id">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
 </mapper>
 
 

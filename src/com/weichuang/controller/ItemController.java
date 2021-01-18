@@ -5,7 +5,9 @@ import com.weichuang.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,13 +50,50 @@ public class ItemController {
         return mav;
     }
 
+    /**
+     * @RequestParam :
+     *      value ： 与前端参数名称保持一致。
+     *      required ： 默认是true，必要属性。false不必须属性，可以传递可以不传。若是设定了必传，就不要加defaultValue属性了。
+     *      defaultValue : 默认值，前端传递了用传递的。不传使用默认值。(分页) defaultValue 与 required = false配合使用
+     *      defaultValue 与 required = true 不建议同时使用。
+     * @param id
+     * @param status
+     * @return
+     */
     @RequestMapping("/itemEdit.do")
-    public ModelAndView getItemEditById(int id){
+    public ModelAndView getItemEditById(@RequestParam(value = "id" , required = false , defaultValue = "2") Integer id , Boolean status){
         //String id = req.getParameter("id");
+        System.out.println("status = " + status);
         Item item = itemService.getItemById(id);
         ModelAndView mav = new ModelAndView();
         mav.addObject("item",item);
         mav.setViewName("editItem");//配置视图解析器之后
         return mav;
+    }
+
+    //Model 与 String 返回值的方式是推荐的
+    @RequestMapping("/itemUpdate.do")
+    public String updateItemById(Model model , Item item){
+
+        System.out.println("item = " + item);
+        //1、将接受到的对象进行更新操作
+        int rows = itemService.updateItemById(item);
+        if(rows > 0){
+            List<Item> itemList = itemService.getItemList();
+            model.addAttribute("itemList",itemList);
+            return "itemList";
+        }
+        return "editItem";
+    }
+
+    @RequestMapping("/itemDelete.do")
+    public String deleteItemByIds(Model model , String[] ids){
+        System.out.println("ids = " + ids);
+        int rows = itemService.deleteItemByIds(ids);
+        if(rows > 0){
+            List<Item> itemList = itemService.getItemList();
+            model.addAttribute("itemList",itemList);
+        }
+        return "itemList";
     }
 }

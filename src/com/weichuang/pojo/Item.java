@@ -9,7 +9,7 @@ public class Item implements Serializable{
     private String price;
     private String detail;
     private String pic;
-    private Date createtime;
+    private String createtime;
 
     public int getId() {
         return id;
@@ -51,11 +51,19 @@ public class Item implements Serializable{
         this.pic = pic;
     }
 
-    public Date getCreatetime() {
+    /*public Date getCreatetime() {
         return createtime;
     }
 
     public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }*/
+
+    public String getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(String createtime) {
         this.createtime = createtime;
     }
 
