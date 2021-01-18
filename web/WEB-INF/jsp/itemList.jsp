@@ -35,7 +35,7 @@
 		<td>${item.createtime}</td>
 		<td>${item.detail }</td>
 
-		<td><a href="${pageContext.request.contextPath }/itemEdit.do?idxx=${item.id}&status=true">修改</a></td>
+		<td><a href="${pageContext.request.contextPath }/itemEdit.do?id=${item.id}&status=true">修改</a></td>
 
 	</tr>
 	</c:forEach>

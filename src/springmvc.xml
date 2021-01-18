@@ -49,5 +49,12 @@
     </bean>
     <!--配置自定义的全局异常处理器-->
     <bean class="com.weichuang.exception.MyHandlerExceptionResolver"></bean>
+
+    <!--图片上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--maxUploadSize : 可以控制文件上传的大小 -->
+        <property name="maxUploadSize" value="1000000"></property>
+
+    </bean>
     <mvc:annotation-driven/>
 </beans>

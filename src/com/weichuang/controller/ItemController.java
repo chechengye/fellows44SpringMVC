@@ -1,7 +1,9 @@
 package com.weichuang.controller;
 
+import com.weichuang.config.Constants;
 import com.weichuang.pojo.Item;
 import com.weichuang.service.ItemService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -9,10 +11,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -40,7 +47,7 @@ public class ItemController {
                 return item;
             }
         });*/
-        int i = 1/0;
+        //int i = 1/0;
         List<Item> itemList = itemService.getItemList();
         //ModelAndView : Model 底层实现 LinkedHashMap 结构key，value
         //前端控制器会将model中配置的所有键值对通过req.setAttribute(key,val)存于域中
@@ -73,18 +80,51 @@ public class ItemController {
         return mav;
     }
 
+    /**
+     * 1、使用MultipartFile pictureFile接收前端上传的图片
+     * 2、获取图片存在的真实路径
+     * 3、修改图片名称。防止多次上传重复问题
+     * 4、获取原文件的扩展名
+     * 5、上传文件至服务器上
+     * 6、将图片的相对地址存于数据库中
+     * @param pictureFile
+     * @param model
+     * @param item
+     * @return
+     */
     //Model 与 String 返回值的方式是推荐的
     @RequestMapping("/itemUpdate.do")
-    public String updateItemById(Model model , Item item){
+    public String updateItemById(MultipartFile pictureFile , Model model , Item item , HttpServletRequest req){
 
-        System.out.println("item = " + item);
-        //1、将接受到的对象进行更新操作
-        int rows = itemService.updateItemById(item);
-        if(rows > 0){
-            List<Item> itemList = itemService.getItemList();
-            model.addAttribute("itemList",itemList);
-            return "itemList";
+        try {
+            ////xxx.jpg  xxxx.png  xxx.
+            System.out.println("item = " + item);
+            System.out.println("pictureFile = " + pictureFile);
+            //获取图片存在的真实路径
+            String realPath = req.getServletContext().getRealPath(Constants.UPLOAD_DIR);
+            //修改图片名称。防止多次上传重复问题
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmssSSS");
+            String fileNewName = df.format(new Date());
+            //获取原文件扩展名 pictureFile.getOriginalFilename() ： 获取文件的全名称
+            String extension = FilenameUtils.getExtension(pictureFile.getOriginalFilename());
+            System.out.println("extension = " + extension);
+            String newOriginalFilename = fileNewName + "." + extension;
+            //上传文件至服务器上
+            pictureFile.transferTo(new File(realPath + "/" + newOriginalFilename));
+            //将图片的相对地址存于数据库中
+            item.setPic(Constants.UPLOAD_DIR + "/" + newOriginalFilename);
+            //1、将接受到的对象进行更新操作
+            int rows = itemService.updateItemById(item);
+            if(rows > 0){
+                List<Item> itemList = itemService.getItemList();
+                model.addAttribute("itemList",itemList);
+                return "itemList";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
         return "editItem";
     }
 
