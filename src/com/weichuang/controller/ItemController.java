@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,7 +29,13 @@ public class ItemController {
 
     @Autowired
     ItemService itemService;
-    //@RequestMapping : 配置前端映射的/路由
+
+    /**
+     * @RequestMapping : 配置前端映射的/路由 。建议要设定请求方式
+     * @param req
+     * @param session
+     * @return
+     */
     @RequestMapping(value = {"/itemList.do" , "/listItem.do"} , method = {RequestMethod.POST , RequestMethod.GET})
     public ModelAndView getItemList(HttpServletRequest req , HttpSession session){
         //1、获取数据库内容
@@ -93,7 +97,7 @@ public class ItemController {
      * @return
      */
     //Model 与 String 返回值的方式是推荐的
-    @RequestMapping("/itemUpdate.do")
+    @RequestMapping(value = "/itemUpdate.do",method = RequestMethod.POST)
     public String updateItemById(MultipartFile pictureFile , Model model , Item item , HttpServletRequest req){
 
         try {
@@ -137,5 +141,19 @@ public class ItemController {
             model.addAttribute("itemList",itemList);
         }
         return "itemList";
+    }
+
+    /**
+     * @RequestBody : 接收前端再Body体中发送过来的Json格式的数据 -- 不太常用
+     * @ResponseBody ： 将返回给前端的对象，转化为Json格式。对象：可以是实体类、列表、Map等
+     *          经常应用*****
+     * @param item
+     */
+    @RequestMapping("/jsonDemo.do")
+    @ResponseBody
+    public Item jsonDemo(@RequestBody Item item){
+        System.out.println("item = " + item);
+        item.setCreatetime("2021-01-18");
+        return item;
     }
 }

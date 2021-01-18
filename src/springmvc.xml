@@ -56,5 +56,18 @@
         <property name="maxUploadSize" value="1000000"></property>
 
     </bean>
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.weichuang.interceptor.MyHandlerInterceptorOne"></bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.weichuang.interceptor.MyHandlerInterceptorTwo"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!--开启MVC的注解驱动，默认会加载很多配置-->
     <mvc:annotation-driven/>
 </beans>
